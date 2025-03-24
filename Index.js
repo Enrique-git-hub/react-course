@@ -1,9 +1,9 @@
-import React from "react";
+import React from 'react'
 
 export default function Index() {
-    return (
-        <div>
-        <h1>Hola mundo</h1>
-        </div>
-    )
+  return (
+    <div>
+      <h1>Hola mundo con rfc</h1>
+    </div>
+  )
 }
