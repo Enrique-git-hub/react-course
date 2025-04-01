@@ -1,6 +1,5 @@
 import React from "react";
 import {List, Avatar, Button} from 'antd'
-import CareRightFilled from '@ant-design/icons'
 import {Link} from 'react-router-dom'
 import Loading from '../Loading/Loading'
 
@@ -20,11 +19,11 @@ export default function MovieList(props) {
 
 function RenderMovie(props) {
     const {movie: {id, title, poster_path}} = props
-    const posterPath = `https://image.tmdb.org/t/original${poster_path}`
+    const posterPath = `https://image.tmdb.org/t/p/original${poster_path}`
     return (
         <List.Item className="movie-list__movie" >
             <List.Item.Meta avatar={<Avatar src={posterPath}/>} title={<Link to={`/movie/${id}`}>{title}</Link>}/>
-            <Link to={`/movie/${id}`}><Button><CareRightFilled/></Button></Link>
+            <Link to={`/movie/${id}`}><Button type="primary" shape="circle" icon=">"/></Link>
         </List.Item>
     )
 }

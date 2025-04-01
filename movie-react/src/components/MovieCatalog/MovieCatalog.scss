@@ -1,0 +1,29 @@
+    
+.ant-row {
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center;
+
+        .ant-col-24 {
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        
+            .ant-card-cover {
+                img {
+                    height: 350px !important;
+                }
+            }
+            .ant-card {
+                margin-top: 25px;
+        
+                
+            }
+            
+            .ant-card-meta-title {
+                text-align: center !important;
+            }
+        }
+    }
