@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
-import { map } from 'lodash';
+import { Container, Row, Col, Spinner } from 'react-bootstrap';
+import { map, size } from 'lodash';
 import { getDocs, getFirestore, collection, orderBy, query } from 'firebase/firestore';
 
 import AddTask from './components/AddTask/AddTask';
+import Task from './components/Task/Task';
 import app from './utils/firebase';
 
 import './App.scss';
@@ -11,22 +12,35 @@ import './App.scss';
 const db = getFirestore(app);
 
 function App() {
-  const [tasks, setTasks] = useState([]);
+  const [tasks, setTasks] = useState(null);
+  const [reload, setReload] = useState(false)
+  const arrayTasks = []
+  const idArrayTasks = [arrayTasks.length]
+  console.log(tasks);
+  
 
   useEffect(() => {
     getTasks();
-  }, []); // Ejecutar solo una vez cuando el componente se monta.
+    setReload(false)
+  }, [reload]); 
 
   const getTasks = async () => {
     try {
       const coleccionRef = collection(db, 'tasks');
-      const q = query(coleccionRef, orderBy('name'));
-      const response = await getDocs(q);
+      const q = query(coleccionRef, orderBy('completed'));
+      const response = await getDocs(q)
 
-      const newTasks = response.docs.map((task) => task.data());
-      setTasks(newTasks);  // Actualizar el estado con las tareas obtenidas.
-      console.log(newTasks);
+      response.docs.forEach((task) => {
+        const data = task.data();
+        data.id = task.id;
       
+        if (!idArrayTasks.includes(data.id)) {
+          idArrayTasks.push(data.id);
+          arrayTasks.push(data);
+        }
+      });
+
+      setTasks(arrayTasks); 
     } catch (e) {
       console.log(e);
     }
@@ -43,9 +57,22 @@ function App() {
           <h2>today</h2>
         </Col>
         <Col className='todo__list' xs={{ span: 10, offset: 1 }} md={{ span: 6, offset: 3 }}>
+
+          {!tasks ? (
+            <div className='loading'>
+              <Spinner/>
+            </div>
+          ) : size(tasks) === 0 ? (
+          <h3>No hay tareas</h3>
+          ) : (
+            map(tasks, (task, index) => (
+              <Task key={index} task={task} setReload={setReload}/>
+            ))
+          )}
+
         </Col>
         <Col className='todo__input' xs={{ span: 10, offset: 1 }} md={{ span: 6, offset: 3 }}>
-          <AddTask />
+          <AddTask setReload={setReload}/>
         </Col>
       </Row>
     </Container>
