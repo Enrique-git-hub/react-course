@@ -11,8 +11,9 @@ import "./AddTask.scss"
 
 const db = getFirestore(app)
 
-export default function AddTask() {
+export default function AddTask(props) {
     const [task, setTask] = useState("")
+    const {setReload} = props
 
     // console.log(app);
     const onSubmit = (e) => {
@@ -20,6 +21,7 @@ export default function AddTask() {
         if (!isEmpty(task)) {
            taskManager(task)
            setTask("")
+           setReload(true)
         }
     }
 
